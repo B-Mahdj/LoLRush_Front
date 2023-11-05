@@ -83,6 +83,7 @@ const checkUniqueValidation = (e) => {
     if (response.data.message === "Username exists") {
       el.classList.add("block")
       el.classList.remove("hidden")
+      el.innerHTML = response.data.message
     } else {
       el.classList.add("hidden")
       el.classList.remove("block")
@@ -92,6 +93,7 @@ const checkUniqueValidation = (e) => {
     if (err.response.data.message === "Username exists") {
       el.classList.add("block")
       el.classList.remove("hidden")
+      el.innerHTML = response.data.message
     } else {
       el.classList.add("hidden")
       el.classList.remove("block")
@@ -183,7 +185,7 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
                 <span v-for="error in v$.player_1.$errors" :key="error.$uid"
                       class="text-sm text-red-600 font-light">{{ error.$message }}</span>
                 <span
-                    class="player_1 text-sm text-red-600 font-normal hidden">This player username already exists.</span>
+                    class="player_1 text-sm text-red-600 font-normal hidden"></span>
               </div>
             </div>
             <!-- / Player-->
@@ -195,7 +197,7 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
                        placeholder="Enter player 2 username"
                        class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
                 <span
-                    class="player_2 text-sm text-red-600 font-normal hidden">This player username already exists.</span>
+                    class="player_2 text-sm text-red-600 font-normal hidden"></span>
               </div>
             </div>
             <!-- / Player-->
@@ -208,7 +210,7 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
                        @keyup="checkUniqueValidation"
                        class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
                 <span
-                    class="player_3 text-sm text-red-600 font-normal hidden">This player username already exists.</span>
+                    class="player_3 text-sm text-red-600 font-normal hidden"></span>
               </div>
             </div>
             <!-- / Player-->
@@ -220,7 +222,7 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
                        @keyup="checkUniqueValidation"
                        class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
                 <span
-                    class="player_4 text-sm text-red-600 font-normal hidden">This player username already exists.</span>
+                    class="player_4 text-sm text-red-600 font-normal hidden"></span>
               </div>
             </div>
             <!-- / Player-->
@@ -233,7 +235,7 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
                        @keyup="checkUniqueValidation"
                        class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
                 <span
-                    class="player_5 text-sm text-red-600 font-normal hidden">This player username already exists.</span>
+                    class="player_5 text-sm text-red-600 font-normal hidden"></span>
               </div>
             </div>
             <!-- / Player-->
@@ -246,7 +248,7 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
                        @keyup="checkUniqueValidation"
                        class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
                 <span
-                    class="player_6 text-sm text-red-600 font-normal hidden">This player username already exists.</span>
+                    class="player_6 text-sm text-red-600 font-normal hidden"></span>
               </div>
             </div>
             <!-- / Player-->
@@ -258,7 +260,7 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
                        @keyup="checkUniqueValidation"
                        class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
                 <span
-                    class="player_7 text-sm text-red-600 font-normal hidden">This player username already exists.</span>
+                    class="player_7 text-sm text-red-600 font-normal hidden"></span>
               </div>
             </div>
             <!-- / Player-->
@@ -270,7 +272,7 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
                        @keyup="checkUniqueValidation"
                        class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
                 <span
-                    class="player_8 text-sm text-red-600 font-normal hidden">This player username already exists.</span>
+                    class="player_8 text-sm text-red-600 font-normal hidden"></span>
               </div>
             </div>
             <!-- / Player-->
