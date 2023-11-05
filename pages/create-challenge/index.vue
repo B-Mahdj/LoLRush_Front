@@ -35,8 +35,6 @@ const allFieldsAreClear = () => {
   fields.forEach(field => {
     errorMessageHide(window.document.querySelector("." + field))
   })
-
-
 }
 
 
@@ -71,7 +69,12 @@ onMounted(function () {
   document.title = "Challenge Form"
 })
 const handleSubmit = async () => {
+  if (formData.player_1 == null || formData.player_2 == null) {
+    errorMessage.value = "The player username at least 2 different players username"
+    return;
+  }
   const result = await v$.value.$validate();
+
   if (result) {
     buttonTitle.value = "Loading..."
     await axios.post("https://lol-rush-back-gxqlr.ondigitalocean.app/create_temporary_page", formData).then(res => {
@@ -199,7 +202,7 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
               </div>
             </div>
             <!-- Player-->
-            <div class="max-sm:block  sm:block md:flex lg:flex items-center gap-12">
+            <div class="max-sm:block  sm:block md:flex lg:flex items-center gap-11">
               <label for="player_1" class="text-sm font-normal">Player Username
                 <RequiredField/>
               </label>
@@ -224,14 +227,22 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
             </div>
             <!-- / Player-->
             <!-- Player-->
-            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-14">
-              <label for="player_2" class="text-sm font-normal">Player Username <RequiredField/></label>
+            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-10">
+              <label for="player_2" class="text-sm font-normal">Player Username
+                <RequiredField/>
+              </label>
               <div class="flex-1">
                 <input id="player_2" name="player_2" v-model="formData.player_2" @keyup="checkUniqueValidation"
                        placeholder="Enter player 2 username"
-                       class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
-                <span
-                    class="player_2 text-sm font-normal hidden"></span>
+                       class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"
+                       :class="{
+                    'border-red-500 focus:border-red-500': v$.player_2.$error,
+                    'border-[#42d392] ': !v$.player_2.$invalid,
+                  }"
+                />
+                <span class="player_2 text-sm font-normal hidden"></span>
+                <span v-for="error in v$.player_2.$errors" :key="error.$uid"
+                      class="text-sm text-red-600 font-light">{{ error.$message }}</span>
               </div>
             </div>
             <!-- / Player-->
