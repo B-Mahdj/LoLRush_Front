@@ -6,11 +6,11 @@ import RequiredField from '~/components/Required.vue'
 import axios from "axios";
 import {useRouter} from "vue-router";
 
-const regionList = ['EUW1', 'EUW1', 'NA1', 'BR1', 'EUN1', 'JP1', 'KR', 'LA1', 'LA2', 'OC1', 'TR1', 'RU', 'PH2', 'SG2', 'TH2', 'TW2', 'VN2'];
+const regionList = ['EUW1', 'NA1', 'BR1', 'EUN1', 'JP1', 'KR', 'LA1', 'LA2', 'OC1', 'TR1', 'RU', 'PH2', 'SG2', 'TH2', 'TW2', 'VN2'];
 const errorMessage = ref("")
 const formData = reactive({
   email: '',
-  region: '',
+  region: 'EUW1',
   player_1: '',
   player_2: '',
   player_3: '',
@@ -31,13 +31,6 @@ const rules = computed(() => {
     },
     region: {required: helpers.withMessage("The region field is required.", required)},
     player_1: {required: helpers.withMessage("The player 1 field is required.", required)},
-    /*player_2: {required: helpers.withMessage("The player 2 field is required.", required)},
-    player_3: {required: helpers.withMessage("The player 3 field is required.", required)},
-    player_4: {required: helpers.withMessage("The player 4 field is required.", required)},
-    player_5: {required: helpers.withMessage("The player 5 field is required.", required)},
-    player_6: {required: helpers.withMessage("The player 6 field is required.", required)},
-    player_7: {required: helpers.withMessage("The player 7 field is required.", required)},
-    player_8: {required: helpers.withMessage("The player 8 field is required.", required)},*/
     daysUntilExpiration: {required: helpers.withMessage("The number of days field is required.", required)},
   };
 });
@@ -76,6 +69,34 @@ const handleSubmit = async () => {
       document.body.scrollIntoView({behavior: 'smooth', block: 'start'});
     })
   }
+}
+
+
+const checkUniqueValidation = (e) => {
+  let name = e.target.name
+  let value = e.target.value
+  axios.post("https://lol-rush-back-gxqlr.ondigitalocean.app/check_username", {
+    player_username: value,
+    region: formData.region
+  }).then(response => {
+    let el = window.document.querySelector("." + name)
+    if (response.data.message === "Username exists") {
+      el.classList.add("block")
+      el.classList.remove("hidden")
+    } else {
+      el.classList.add("hidden")
+      el.classList.remove("block")
+    }
+  }).catch(err => {
+    let el = window.document.querySelector("." + name)
+    if (err.response.data.message === "Username exists") {
+      el.classList.add("block")
+      el.classList.remove("hidden")
+    } else {
+      el.classList.add("hidden")
+      el.classList.remove("block")
+    }
+  })
 }
 
 const route = useRouter();
@@ -128,9 +149,13 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
                   for="region">Region
                 <RequiredField/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
               <div class="flex-1">
-                <select  id="region"  v-model="formData.region"  class="w-full rounded border text-sm bg-gray-800 border-gray-600 py-2.5 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent" :class="{'border-red-500 focus:border-red-500': v$.region.$error,'border-[#42d392] ': !v$.region.$invalid}">
-                  <option value="" class="font-light bg-gray-800">Select Region</option>
-                  <option v-for="region in regionList" :key="region" :value="region" class="font-light bg-gray-800">{{ region }}</option>
+                <select id="region" v-model="formData.region"
+                        class="w-full rounded border text-sm bg-gray-800 border-gray-600 py-2.5 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"
+                        :class="{'border-red-500 focus:border-red-500': v$.region.$error,'border-[#42d392] ': !v$.region.$invalid}">
+                  <option v-for="(region, index) in regionList" :key="region" :value="region"
+                          class="font-light bg-gray-800">
+                    {{ region }}
+                  </option>
                 </select>
                 <span v-for="error in v$.region.$errors" :key="error.$uid" class="text-sm text-red-600 font-light">
             {{ error.$message }}
@@ -145,105 +170,135 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
               <div class="flex-1">
                 <input
                     id="player_1"
+                    name="player_1"
                     v-model="formData.player_1"
-                    @change="v$.player_1.$touch"
+                    @change="v$.player_1.$touch()"
+                    @keyup="checkUniqueValidation"
                     placeholder="Enter player 1 username"
                     class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"
                     :class="{
                     'border-red-500 focus:border-red-500': v$.player_1.$error,
                     'border-[#42d392] ': !v$.player_1.$invalid,
                   }" label="Player 1"/>
-                <span v-for="error in v$.player_1.$errors" :key="error.$uid" class="text-sm text-red-600 font-light">{{ error.$message }}</span>
+                <span v-for="error in v$.player_1.$errors" :key="error.$uid"
+                      class="text-sm text-red-600 font-light">{{ error.$message }}</span>
+                <span
+                    class="player_1 text-sm text-red-600 font-normal hidden">This player username already exists.</span>
               </div>
             </div>
             <!-- / Player-->
             <!-- Player-->
-            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-12">
-              <label for="player_2" class="text-sm font-normal">Player Username
-                <RequiredField/>
-              </label>
+            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-14">
+              <label for="player_2" class="text-sm font-normal">Player Username</label>
               <div class="flex-1">
-                <input id="player_2" v-model="formData.player_2" placeholder="Enter player 2 username" class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent" />
+                <input id="player_2" name="player_2" v-model="formData.player_2" @keyup="checkUniqueValidation"
+                       placeholder="Enter player 2 username"
+                       class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
+                <span
+                    class="player_2 text-sm text-red-600 font-normal hidden">This player username already exists.</span>
               </div>
             </div>
             <!-- / Player-->
             <!-- Player-->
-            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-12">
+            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-14">
               <label for="player_3" class="text-sm font-normal">Player Username
-                <RequiredField/>
               </label>
               <div class="flex-1">
-                <input id="player_3" v-model="formData.player_3" placeholder="Enter player 3 username"  class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
+                <input id="player_3" name="player_3" v-model="formData.player_3" placeholder="Enter player 3 username"
+                       @keyup="checkUniqueValidation"
+                       class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
+                <span
+                    class="player_3 text-sm text-red-600 font-normal hidden">This player username already exists.</span>
               </div>
             </div>
             <!-- / Player-->
             <!-- Player-->
-            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-12">
-              <label for="player_4" class="text-sm font-normal">Player Username
-                <RequiredField/>
-              </label>
+            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-14">
+              <label for="player_4" class="text-sm font-normal">Player Username</label>
               <div class="flex-1">
-                <input id="player_4" v-model="formData.player_4" placeholder="Enter player 4 username" class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
+                <input id="player_4" name="player_4" v-model="formData.player_4" placeholder="Enter player 4 username"
+                       @keyup="checkUniqueValidation"
+                       class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
+                <span
+                    class="player_4 text-sm text-red-600 font-normal hidden">This player username already exists.</span>
               </div>
             </div>
             <!-- / Player-->
             <!-- Player-->
-            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-12">
-              <label for="player5" class="text-sm font-normal">Player Username
-                <RequiredField/>
+            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-14">
+              <label for="player_5" class="text-sm font-normal">Player Username
               </label>
               <div class="flex-1">
-                <input id="player5" v-model="formData.player_5" placeholder="Enter player 5 username" class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
+                <input id="player_5" name="player_5" v-model="formData.player_5" placeholder="Enter player 5 username"
+                       @keyup="checkUniqueValidation"
+                       class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
+                <span
+                    class="player_5 text-sm text-red-600 font-normal hidden">This player username already exists.</span>
               </div>
             </div>
             <!-- / Player-->
             <!-- Player-->
-            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-12">
+            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-14">
               <label for="player_6" class="text-sm font-normal">Player Username
-                <RequiredField/>
               </label>
               <div class="flex-1">
-                <input id="player_6" v-model="formData.player_6" placeholder="Enter player 6 username" class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent" />
+                <input id="player_6" name="player_6" v-model="formData.player_6" placeholder="Enter player 6 username"
+                       @keyup="checkUniqueValidation"
+                       class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
+                <span
+                    class="player_6 text-sm text-red-600 font-normal hidden">This player username already exists.</span>
               </div>
             </div>
             <!-- / Player-->
             <!-- Player-->
-            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-12">
-              <label for="player_7" class="text-sm font-normal">Player Username
-                <RequiredField/>
-              </label>
+            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-14">
+              <label for="player_7" class="text-sm font-normal">Player Username</label>
               <div class="flex-1">
-                <input id="player_7" v-model="formData.player_7" placeholder="Enter player 7 username" class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
+                <input id="player_7" name="player_7" v-model="formData.player_7" placeholder="Enter player 7 username"
+                       @keyup="checkUniqueValidation"
+                       class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
+                <span
+                    class="player_7 text-sm text-red-600 font-normal hidden">This player username already exists.</span>
               </div>
             </div>
             <!-- / Player-->
             <!-- Player-->
-            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-12">
-              <label for="player_8" class="text-sm font-normal">Player Username
-                <RequiredField/>
-              </label>
+            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-14">
+              <label for="player_8" class="text-sm font-normal">Player Username</label>
               <div class="flex-1">
-                <input id="player_8" v-model="formData.player_8" placeholder="Enter player 8 username" class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
+                <input id="player_8" name="player_8" v-model="formData.player_8" placeholder="Enter player 8 username"
+                       @keyup="checkUniqueValidation"
+                       class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
+                <span
+                    class="player_8 text-sm text-red-600 font-normal hidden">This player username already exists.</span>
               </div>
             </div>
             <!-- / Player-->
-            <div class="max-sm:block sm:block md:flex lg:flex gap-12 items-center">
+            <div class="max-sm:block sm:block md:flex lg:flex gap-10 items-center">
               <label for="number_of_days" class="font-normal">Number of days
                 <RequiredField/>
               </label>
               <div class="flex-1">
-                <input id="number_of_days" type="number" v-model="formData.daysUntilExpiration" @change="v$.daysUntilExpiration.$touch" placeholder="Number of days of the challenge (1 - 14 days)" class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-300 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent" :class="{
-            'border-red-500 focus:border-red-500': v$.daysUntilExpiration.$error, 'border-[#42d392] ': !v$.daysUntilExpiration.$invalid}" label="Player 1"/>
-                <span v-for="error in v$.daysUntilExpiration.$errors" :key="error.$uid" class="text-sm text-red-600 font-light">
+                <input id="number_of_days" type="number" v-model="formData.daysUntilExpiration"
+                       @change="v$.daysUntilExpiration.$touch"
+                       placeholder="Number of days of the challenge (1 - 14 days)"
+                       class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-300 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"
+                       :class="{
+            'border-red-500 focus:border-red-500': v$.daysUntilExpiration.$error, 'border-[#42d392] ': !v$.daysUntilExpiration.$invalid}"
+                       label="Player 1"/>
+                <span v-for="error in v$.daysUntilExpiration.$errors" :key="error.$uid"
+                      class="text-sm text-red-600 font-light">
                   {{ error.$message }}
                 </span>
               </div>
             </div>
             <div class="max-sm:text-center text-end font-normal">
-              <NuxtLink to="/" class="inline-block font-normal max-sm:py-2 max-sm:px-5 sm:px-7 py-2 bg-gray-400 mr-3 text-white rounded mt-3 px-8">
+              <NuxtLink to="/"
+                        class="inline-block font-normal max-sm:py-2 max-sm:px-5 sm:px-7 py-2 bg-gray-400 mr-3 text-white rounded mt-3 px-8">
                 Cancel
               </NuxtLink>
-              <button type="submit" class="max-sm:py-2 max-sm:px-5 sm:px-7 py-2 font-normal bg-green-500 text-white rounded mt-3 px-8">
+              <button type="submit"
+                      class="max-sm:py-2 max-sm:px-5 sm:px-7 py-2 font-normal bg-green-500 text-white rounded mt-3 px-8">
                 {{ buttonTitle }}
               </button>
             </div>
@@ -251,16 +306,19 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
         </div>
       </div>
       <transition name="fade" appear>
-        <div v-if="successModal" class="bg-[#ffffff95] transition-all ease-in-out delay-150 duration-300 backdrop-blur-sm fixed top-0 left-0 w-full h-full">
+        <div v-if="successModal"
+             class="bg-[#ffffff95] transition-all ease-in-out delay-150 duration-300 backdrop-blur-sm fixed top-0 left-0 w-full h-full">
           <div class="flex justify-center items-center h-full">
-            <form class="max-sm:w-10/12 transition-all ease-in-out delay-150 duration-300 sm:w-6/12 md:w-6/12 lg:w-4/12 xl:w-4/12 bg-white rounded py-2 shadow-md px-5 space-y-5">
+            <form
+                class="max-sm:w-10/12 transition-all ease-in-out delay-150 duration-300 sm:w-6/12 md:w-6/12 lg:w-4/12 xl:w-4/12 bg-white rounded py-2 shadow-md px-5 space-y-5">
               <p class="text-2xl text-green-700">Success</p>
               <hr>
               <p class="text-sm text-green-700 mb-0 pb-0">{{ successMessage.message }}</p>
               <p class="capitalize cursor-pointer text-green-600 m-0 pt-0">Your confirmation Code Is: <span
                   @click="copyCode" id="code">{{ successMessage.code }}</span></p>
               <div class="flex justify-end gap-4">
-                <button type="submit" id="confirmation_code_submit_button" @click="copyCode" class="bg-green-600 hover:bg-green-700 transition py-2 rounded px-6 text-white inline-block">
+                <button type="submit" id="confirmation_code_submit_button" @click="copyCode"
+                        class="bg-green-600 hover:bg-green-700 transition py-2 rounded px-6 text-white inline-block">
                   Copy
                 </button>
               </div>
