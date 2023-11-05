@@ -7,14 +7,22 @@
           <p class="font-normal text-1.1em text-gray-100">Confirmation Code</p>
         </div>
         <div class="py-4 bg-[#0F172A90] px-2">
-          <label>
-            <input type="text" placeholder="Enter confirmation code" v-model="formData.confirm_code"
-                   @change="modalFormSubmitHandler"
-                   :class="{'border-red-500 focus:border-red-500': validator$.confirm_code.$error, 'border-[#42d392] ': !validator$.confirm_code.$invalid}"
-                   class="bg-opacity-20 w-full rounded border border-gray-700 bg-transparent text-white py-1 px-3 text-base font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-500 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent">
+          <label class="md:flex lg:flex sm:block max-sm:block flex-row max-sm:space-y-5">
+            <span class="flex-1">
+              <input type="text" placeholder="Enter confirmation code" v-model="formData.confirm_code"
+                     @change="validator$.confirm_code.$touch()"
+                     :class="{'border-red-500 focus:border-red-500': validator$.confirm_code.$error, 'border-[#42d392] ': !validator$.confirm_code.$invalid}"
+                     class="bg-opacity-20 w-full rounded border border-gray-700 bg-transparent text-white py-1 px-2 text-base font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-500 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent">
+            <span v-for="error in validator$.confirm_code.$errors" :key="error.$uid"
+                  class="text-red-600 text-sm font-light">{{ error.$message }}</span>
+            </span>
+            <span class="rounded rounded-l-none border-0 font-bold text-grey-100">
+                    <button
+                        @click="modalFormSubmitHandler"
+                        class="bg-green-600 max-sm:w-full sm:w-full text-lg font-normal text-gray-300 py-2 px-6 rounded">Search</button>
+                </span>
           </label>
-          <span v-for="error in validator$.confirm_code.$errors" :key="error.$uid"
-                class="text-red-600 text-sm font-light">{{ error.$message }}</span>
+
         </div>
       </div>
       <transition name="fade">
