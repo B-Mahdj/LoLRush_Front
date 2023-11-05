@@ -8,7 +8,7 @@ import {useRouter} from "vue-router";
 
 const regionList = ['EUW1', 'NA1', 'BR1', 'EUN1', 'JP1', 'KR', 'LA1', 'LA2', 'OC1', 'TR1', 'RU', 'PH2', 'SG2', 'TH2', 'TW2', 'VN2'];
 const errorMessage = ref("")
-const formData = reactive({
+let formData = reactive({
   email: '',
   region: 'EUW1',
   player_1: '',
@@ -21,6 +21,23 @@ const formData = reactive({
   player_8: '',
   daysUntilExpiration: null,
 });
+
+const allFieldsAreClear = () => {
+  formData.player_1 = ""
+  formData.player_2 = ""
+  formData.player_3 = ""
+  formData.player_4 = ""
+  formData.player_5 = ""
+  formData.player_6 = ""
+  formData.player_7 = ""
+  formData.player_8 = ""
+  const fields = ["player_1", "player_2", "player_3", "player_4", "player_5", "player_6", "player_7", "player_8"]
+  fields.forEach(field => {
+    errorMessageHide(window.document.querySelector("." + field))
+  })
+
+
+}
 
 
 const rules = computed(() => {
@@ -70,6 +87,7 @@ const handleSubmit = async () => {
     })
   }
 }
+
 
 const errorMessageHide = (el) => {
   el.classList.add("hidden")
@@ -167,7 +185,7 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
                   for="region">Region
                 <RequiredField/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
               <div class="flex-1">
-                <select id="region" v-model="formData.region"
+                <select id="region" v-model="formData.region" @change="allFieldsAreClear"
                         class="w-full rounded border text-sm bg-gray-800 border-gray-600 py-2.5 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"
                         :class="{'border-red-500 focus:border-red-500': v$.region.$error,'border-[#42d392] ': !v$.region.$invalid}">
                   <option v-for="(region, index) in regionList" :key="region" :value="region"
