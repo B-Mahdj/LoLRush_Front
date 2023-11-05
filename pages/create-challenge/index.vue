@@ -71,35 +71,52 @@ const handleSubmit = async () => {
   }
 }
 
+const errorMessageHide = (el) => {
+  el.classList.add("hidden")
+  el.classList.remove("block")
+}
 
 const checkUniqueValidation = (e) => {
-  let name = e.target.name
-  let value = e.target.value
+  const name: String = e.target.name
+  const value: String = e.target.value
+  const element: Element = window.document.querySelector("." + name)
   axios.post("https://lol-rush-back-gxqlr.ondigitalocean.app/check_username", {
     player_username: value,
     region: formData.region
   }).then(response => {
-    let el = window.document.querySelector("." + name)
-    if (response.data.message === "Username exists") {
-      el.classList.add("block")
-      el.classList.remove("hidden")
-      el.innerHTML = response.data.message
-    } else {
-      el.classList.add("hidden")
-      el.classList.remove("block")
+    if (response.status === 404 && response.data.message !== "Bad Request, one or more of the required fields are missing") {
+      element.classList.add("text-red-600")
+      element.classList.remove("text-green-600")
     }
+    if (response.status === 200) {
+      element.classList.add("text-green-600")
+      element.classList.remove("text-red-600")
+    }
+    if (response.data.message !== "Bad Request, one or more of the required fields are missing") {
+      element.classList.remove('hidden')
+    }
+    element.innerHTML = response.data.message
   }).catch(err => {
-    let el = window.document.querySelector("." + name)
-    if (err.response.data.message === "Username exists") {
-      el.classList.add("block")
-      el.classList.remove("hidden")
-      el.innerHTML = response.data.message
-    } else {
-      el.classList.add("hidden")
-      el.classList.remove("block")
+    if (err.response.status === 404) {
+      element.classList.add("text-red-600")
+      element.classList.remove("text-green-600")
     }
+    if (err.response.status === 200) {
+      element.classList.add("text-green-600")
+      element.classList.remove("text-red-600")
+    }
+
+    if (err.response.data.message !== "Bad Request, one or more of the required fields are missing") {
+      element.classList.remove('hidden')
+    }
+    element.innerHTML = err.response.data.message
   })
+
+  if (value === "") {
+    errorMessageHide(element)
+  }
 }
+
 
 const route = useRouter();
 const copyCode = function (e: { target: { innerHTML: string; }; }) {
@@ -140,9 +157,8 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
             'border-red-500 focus:border-red-500': v$.email.$error,
             'border-[#42d392] ': !v$.email.$invalid,
           }" label="Email" field="input"/>
-                <span v-for="error in v$.email.$errors" :key="error.$uid" class="text-sm text-red-600 font-light">
-            {{ error.$message }}
-          </span>
+                <span v-for="error in v$.email.$errors" :key="error.$uid"
+                      class="text-sm text-red-600 font-light">{{ error.$message }}</span>
               </div>
             </div>
             <div class="max-sm:block sm:block md:flex lg:flex gap-12 items-center">
@@ -159,9 +175,8 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
                     {{ region }}
                   </option>
                 </select>
-                <span v-for="error in v$.region.$errors" :key="error.$uid" class="text-sm text-red-600 font-light">
-            {{ error.$message }}
-          </span>
+                <span v-for="error in v$.region.$errors" :key="error.$uid"
+                      class="text-sm text-red-600 font-light">{{ error.$message }}</span>
               </div>
             </div>
             <!-- Player-->
@@ -185,7 +200,7 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
                 <span v-for="error in v$.player_1.$errors" :key="error.$uid"
                       class="text-sm text-red-600 font-light">{{ error.$message }}</span>
                 <span
-                    class="player_1 text-sm text-red-600 font-normal hidden"></span>
+                    class="player_1 text-sm font-normal hidden"></span>
               </div>
             </div>
             <!-- / Player-->
@@ -197,7 +212,7 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
                        placeholder="Enter player 2 username"
                        class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
                 <span
-                    class="player_2 text-sm text-red-600 font-normal hidden"></span>
+                    class="player_2 text-sm font-normal hidden"></span>
               </div>
             </div>
             <!-- / Player-->
@@ -210,7 +225,7 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
                        @keyup="checkUniqueValidation"
                        class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
                 <span
-                    class="player_3 text-sm text-red-600 font-normal hidden"></span>
+                    class="player_3 text-sm font-normal hidden"></span>
               </div>
             </div>
             <!-- / Player-->
@@ -222,7 +237,7 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
                        @keyup="checkUniqueValidation"
                        class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
                 <span
-                    class="player_4 text-sm text-red-600 font-normal hidden"></span>
+                    class="player_4 text-sm font-normal hidden"></span>
               </div>
             </div>
             <!-- / Player-->
@@ -235,7 +250,7 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
                        @keyup="checkUniqueValidation"
                        class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
                 <span
-                    class="player_5 text-sm text-red-600 font-normal hidden"></span>
+                    class="player_5 text-sm font-normal hidden"></span>
               </div>
             </div>
             <!-- / Player-->
@@ -248,7 +263,7 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
                        @keyup="checkUniqueValidation"
                        class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
                 <span
-                    class="player_6 text-sm text-red-600 font-normal hidden"></span>
+                    class="player_6 text-sm font-normal hidden"></span>
               </div>
             </div>
             <!-- / Player-->
@@ -260,7 +275,7 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
                        @keyup="checkUniqueValidation"
                        class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
                 <span
-                    class="player_7 text-sm text-red-600 font-normal hidden"></span>
+                    class="player_7 text-sm font-normal hidden"></span>
               </div>
             </div>
             <!-- / Player-->
@@ -272,7 +287,7 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
                        @keyup="checkUniqueValidation"
                        class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"/>
                 <span
-                    class="player_8 text-sm text-red-600 font-normal hidden"></span>
+                    class="player_8 text-sm font-normal hidden"></span>
               </div>
             </div>
             <!-- / Player-->
