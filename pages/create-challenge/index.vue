@@ -48,6 +48,7 @@ const rules = computed(() => {
     },
     region: {required: helpers.withMessage("The region field is required.", required)},
     player_1: {required: helpers.withMessage("The player 1 field is required.", required)},
+    player_2: {required: helpers.withMessage("The player 2 field is required.", required)},
     daysUntilExpiration: {required: helpers.withMessage("The number of days field is required.", required)},
   };
 });
@@ -224,7 +225,7 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
             <!-- / Player-->
             <!-- Player-->
             <div class="max-sm:block sm:block md:flex lg:flex items-center gap-14">
-              <label for="player_2" class="text-sm font-normal">Player Username</label>
+              <label for="player_2" class="text-sm font-normal">Player Username <RequiredField/></label>
               <div class="flex-1">
                 <input id="player_2" name="player_2" v-model="formData.player_2" @keyup="checkUniqueValidation"
                        placeholder="Enter player 2 username"
