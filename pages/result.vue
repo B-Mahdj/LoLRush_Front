@@ -7,7 +7,7 @@
           <p class="font-normal text-1.1em text-gray-100">Confirmation Code</p>
         </div>
         <div class="py-4 bg-[#0F172A90] px-2">
-          <label class="md:flex lg:flex sm:block max-sm:block flex-row max-sm:space-y-5">
+          <label class="md:flex lg:flex sm:block max-sm:block flex-row max-sm:space-y-5 gap-1">
             <span class="flex-1">
               <input type="text" placeholder="Enter confirmation code" v-model="formData.confirm_code"
                      @change="validator$.confirm_code.$touch()"
@@ -20,7 +20,7 @@
                     <button
                         :disabled="loading"
                         @click="modalFormSubmitHandler"
-                        class="bg-green-600 max-sm:w-full sm:w-full text-lg font-normal text-gray-300 py-2 px-6 rounded">{{
+                        class="bg-green-600 max-sm:w-full sm:w-full  font-normal text-gray-300 py-2 px-6 rounded">{{
                         ConfirmButtonTitle
                       }}</button>
                 </span>
@@ -102,6 +102,7 @@ const modalFormSubmitHandler = async () => {
   loading.value = true
   if (result) {
     //const confirmationCodeSubmitButton = document.querySelector("#confirmationCodeSubmitButton")
+    axios.defaults.timeout = 6000;
     await axios.get("https://lol-rush-back-gxqlr.ondigitalocean.app/page?code=" + formData.confirm_code).then(res => {
       if (res.status === 200) {
         results.value = res.data
