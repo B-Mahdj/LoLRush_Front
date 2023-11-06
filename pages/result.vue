@@ -18,8 +18,11 @@
             </span>
             <span class="rounded rounded-l-none border-0 font-bold text-grey-100">
                     <button
+                        :disabled="loading"
                         @click="modalFormSubmitHandler"
-                        class="bg-green-600 max-sm:w-full sm:w-full text-lg font-normal text-gray-300 py-2 px-6 rounded">{{ ConfirmButtonTitle }}</button>
+                        class="bg-green-600 max-sm:w-full sm:w-full text-lg font-normal text-gray-300 py-2 px-6 rounded">{{
+                        ConfirmButtonTitle
+                      }}</button>
                 </span>
           </label>
 
@@ -38,7 +41,7 @@
                   <li v-for="(player, index) in results.players_info" :key="index"
                       class="hover:bg-gradient-to-br  hover:from-[#7A7A7A] hover:to-[#252525]">
                     <div class="grid grid-cols-5 items-center">
-                      <div class="pl-6 font-normal text-gray-300">{{ player.username }}</div>
+                      <div class="pl-6 font-normal text-gray-300">{{ 1 + index +"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+ player.username }}</div>
                       <div class="pl-6 text-gray-300 gap-2 flex items-center">
                         <img :src="`data:image/png;base64,${player.rank.icon}`" :alt="player.username" class="w-14">
                         <p class="font-normal text-lg">{{ player.rank.rank + " - " + player.rank.leaguePoints }}</p>
@@ -69,7 +72,7 @@ import axios from "axios";
 import {useRouter} from "vue-router";
 
 onMounted(function () {
-  document.title = "Code Configuration Resources"
+  document.title = "See Challenge"
 })
 const formData = reactive({
   confirm_code: null
@@ -91,11 +94,12 @@ onMounted(() => {
   })
 })
 const results = ref({})
-const buttonText = ref("Search")
+const loading = ref(false)
 const validator$ = useVuelidate(rules, formData)
 const modalFormSubmitHandler = async () => {
   const result = await validator$.value.$validate()
   ConfirmButtonTitle.value = "Processing...."
+  loading.value = true
   if (result) {
     //const confirmationCodeSubmitButton = document.querySelector("#confirmationCodeSubmitButton")
     await axios.get("https://lol-rush-back-gxqlr.ondigitalocean.app/page?code=" + formData.confirm_code).then(res => {
@@ -110,6 +114,7 @@ const modalFormSubmitHandler = async () => {
     })
   }
   ConfirmButtonTitle.value = "Confirm"
+  loading.value = false
 }
 
 
