@@ -361,11 +361,9 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
               <p class="text-2xl text-green-700">Success</p>
               <hr>
               <p class="text-sm text-green-700 mb-0 pb-0">{{ successMessage.message }}</p>
-              <p class="capitalize cursor-pointer text-green-600 m-0 pt-0">Your confirmation Code Is: <span
-                  @click="copyCode" id="code">{{ successMessage.code }}</span></p>
+              <p class="capitalize cursor-pointer text-green-600 m-0 pt-0">Your confirmation Code Is: <code id="code">{{ successMessage.code }}</code></p>
               <div class="flex justify-end gap-4">
-                <button type="submit" id="confirmation_code_submit_button" @click="copyCode"
-                        class="bg-green-600 hover:bg-green-700 transition py-2 rounded px-6 text-white inline-block">
+                <button type="submit" id="confirmation_code_submit_button" @click="copyCode" class="bg-green-600 hover:bg-green-700 transition py-2 rounded px-6 text-white inline-block">
                   Copy
                 </button>
               </div>
