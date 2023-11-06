@@ -4,7 +4,6 @@ import {useVuelidate} from '@vuelidate/core';
 import {required, email, helpers} from '@vuelidate/validators';
 import RequiredField from '~/components/Required.vue'
 import axios from "axios";
-import {useRouter} from "vue-router";
 
 const regionList = ['EUW1', 'NA1', 'BR1', 'EUN1', 'JP1', 'KR', 'LA1', 'LA2', 'OC1', 'TR1', 'RU', 'PH2', 'SG2', 'TH2', 'TW2', 'VN2'];
 const errorMessage = ref("")
@@ -139,12 +138,10 @@ const checkUniqueValidation = (e) => {
   }
 }
 
-
-const route = useRouter();
-const copyCode = function (e: { target: { innerHTML: string; }; }) {
+const copied = ref(false)
+const copyCode = function () {
   navigator.clipboard.writeText(successMessage.value.code)
-  route.replace("/")
-
+  copied.value = true
 }
 </script>
 
@@ -361,11 +358,17 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
               <p class="text-2xl text-green-700">Success</p>
               <hr>
               <p class="text-sm text-green-700 mb-0 pb-0">{{ successMessage.message }}</p>
-              <p class="capitalize cursor-pointer text-green-600 m-0 pt-0">Your confirmation Code Is: <code id="code">{{ successMessage.code }}</code></p>
+              <p class="capitalize cursor-pointer text-green-600 m-0 pt-0">Your confirmation Code Is: <code id="code" class="pr-2">
+                {{ successMessage.code }}</code>
+                <span class="text-green-600 text-sm" style="font-size: 10px" v-if="copied">Copied</span>
+              </p>
               <div class="flex justify-end gap-4">
-                <button type="submit" id="confirmation_code_submit_button" @click="copyCode" class="bg-green-600 hover:bg-green-700 transition py-2 rounded px-6 text-white inline-block">
+                <button type="button" id="confirmation_code_submit_button" @click="copyCode" class="bg-green-600 hover:bg-green-700 transition py-2 rounded px-6 text-white inline-block">
                   Copy
                 </button>
+                <NuxtLink to="/" id="confirmation_code_submit_button" class="bg-gray-600 hover:bg-gray-700 transition py-2 rounded px-6 text-white inline-block">
+                  Back
+                </NuxtLink>
               </div>
             </form>
           </div>
