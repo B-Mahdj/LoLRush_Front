@@ -101,7 +101,7 @@ const modalFormSubmitHandler = async () => {
   ConfirmButtonTitle.value = "Processing...."
   loading.value = true
   if (result) {
-    //const confirmationCodeSubmitButton = document.querySelector("#confirmationCodeSubmitButton")
+    results.value = []
     axios.defaults.timeout = 6000;
     await axios.get("https://lol-rush-back-gxqlr.ondigitalocean.app/page?code=" + formData.confirm_code).then(res => {
       if (res.status === 200) {
