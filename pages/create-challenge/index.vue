@@ -156,7 +156,7 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
         <div class="sm:w-full md:w-full lg:w-full xl:w-3/4 max-sm:mx-4 p-5 bg-[#1E293B] rounded shadow">
           <div class="border-b border-gray-600">
             <p class="text-2xl py-1 text-gray-200">Challenge Form</p>
-            <p class="font-normal text-sm pb-3 text-gray-200">Use a permanent address where you can receive mail.</p>
+            <p class="font-normal text-sm pb-3 text-gray-200">Create here your challenge by providing your mail, region, 2 to 8 player usernames (at least 2 required) and the number of days the challenge will last</p>
           </div>
           <form @submit.prevent="handleSubmit" class="space-y-5 mt-8  text-gray-200" style="z-index: 999;">
             <div v-if="errorMessage"
@@ -164,8 +164,8 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
               <p class="text-sm text-red-700">{{ errorMessage }}</p>
 
             </div>
-            <div class="max-sm:block  sm:block md:flex lg:flex gap-12 items-center">
-              <label for="email" class="font-normal">Email Address
+            <div class="max-sm:block  sm:block md:flex lg:flex items-center">
+              <label for="email" class="font-normal w-40">Email Address
                 <RequiredField/>
               </label>
               <div class="flex-1">
@@ -183,9 +183,9 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
                       class="text-sm text-red-600 font-light">{{ error.$message }}</span>
               </div>
             </div>
-            <div class="max-sm:block sm:block md:flex lg:flex gap-12 items-center">
+            <div class="max-sm:block sm:block md:flex lg:flex items-center">
               <label
-                  class="font-normal"
+                  class="font-normal w-40"
                   for="region">Region
                 <RequiredField/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
               <div class="flex-1">
@@ -202,8 +202,8 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
               </div>
             </div>
             <!-- Player-->
-            <div class="max-sm:block  sm:block md:flex lg:flex items-center gap-11">
-              <label for="player_1" class="text-sm font-normal">Player Username
+            <div class="max-sm:block  sm:block md:flex lg:flex items-center">
+              <label for="player_1" class="text-sm font-normal w-40">Player Username
                 <RequiredField/>
               </label>
               <div class="flex-1">
@@ -227,8 +227,8 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
             </div>
             <!-- / Player-->
             <!-- Player-->
-            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-10">
-              <label for="player_2" class="text-sm font-normal">Player Username
+            <div class="max-sm:block sm:block md:flex lg:flex items-center">
+              <label for="player_2" class="text-sm font-normal w-40">Player Username
                 <RequiredField/>
               </label>
               <div class="flex-1">
@@ -247,8 +247,8 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
             </div>
             <!-- / Player-->
             <!-- Player-->
-            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-14">
-              <label for="player_3" class="text-sm font-normal">Player Username
+            <div class="max-sm:block sm:block md:flex lg:flex items-center">
+              <label for="player_3" class="text-sm font-normal w-40">Player Username
               </label>
               <div class="flex-1">
                 <input id="player_3" name="player_3" v-model="formData.player_3" placeholder="Enter player 3 username"
@@ -260,8 +260,8 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
             </div>
             <!-- / Player-->
             <!-- Player-->
-            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-14">
-              <label for="player_4" class="text-sm font-normal">Player Username</label>
+            <div class="max-sm:block sm:block md:flex lg:flex items-center">
+              <label for="player_4" class="text-sm font-normal w-40">Player Username</label>
               <div class="flex-1">
                 <input id="player_4" name="player_4" v-model="formData.player_4" placeholder="Enter player 4 username"
                        @keyup="checkUniqueValidation"
@@ -272,8 +272,8 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
             </div>
             <!-- / Player-->
             <!-- Player-->
-            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-14">
-              <label for="player_5" class="text-sm font-normal">Player Username
+            <div class="max-sm:block sm:block md:flex lg:flex items-center">
+              <label for="player_5" class="text-sm font-normal w-40">Player Username
               </label>
               <div class="flex-1">
                 <input id="player_5" name="player_5" v-model="formData.player_5" placeholder="Enter player 5 username"
@@ -285,8 +285,8 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
             </div>
             <!-- / Player-->
             <!-- Player-->
-            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-14">
-              <label for="player_6" class="text-sm font-normal">Player Username
+            <div class="max-sm:block sm:block md:flex lg:flex items-center">
+              <label for="player_6" class="text-sm font-normal w-40">Player Username
               </label>
               <div class="flex-1">
                 <input id="player_6" name="player_6" v-model="formData.player_6" placeholder="Enter player 6 username"
@@ -298,8 +298,8 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
             </div>
             <!-- / Player-->
             <!-- Player-->
-            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-14">
-              <label for="player_7" class="text-sm font-normal">Player Username</label>
+            <div class="max-sm:block sm:block md:flex lg:flex items-center">
+              <label for="player_7" class="text-sm font-normal w-40">Player Username</label>
               <div class="flex-1">
                 <input id="player_7" name="player_7" v-model="formData.player_7" placeholder="Enter player 7 username"
                        @keyup="checkUniqueValidation"
@@ -310,8 +310,8 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
             </div>
             <!-- / Player-->
             <!-- Player-->
-            <div class="max-sm:block sm:block md:flex lg:flex items-center gap-14">
-              <label for="player_8" class="text-sm font-normal">Player Username</label>
+            <div class="max-sm:block sm:block md:flex lg:flex items-center">
+              <label for="player_8" class="text-sm font-normal w-40">Player Username</label>
               <div class="flex-1">
                 <input id="player_8" name="player_8" v-model="formData.player_8" placeholder="Enter player 8 username"
                        @keyup="checkUniqueValidation"
@@ -321,15 +321,15 @@ const copyCode = function (e: { target: { innerHTML: string; }; }) {
               </div>
             </div>
             <!-- / Player-->
-            <div class="max-sm:block sm:block md:flex lg:flex gap-10 items-center">
-              <label for="number_of_days" class="font-normal">Number of days
+            <div class="max-sm:block sm:block md:flex lg:flex items-center">
+              <label for="number_of_days" class="font-normal w-40">Number of days
                 <RequiredField/>
               </label>
               <div class="flex-1">
                 <input id="number_of_days" type="number" v-model="formData.daysUntilExpiration"
                        @change="v$.daysUntilExpiration.$touch"
                        placeholder="Number of days of the challenge (1 - 14 days)"
-                       class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-300 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"
+                       class="bg-opacity-20 w-full rounded border text-sm border-gray-600 bg-transparent py-1 px-3 font-normal leading-8 outline-none transition-colors duration-200 ease-in-out placeholder:text-gray-400 focus:border-blue-500 focus:bg-transparent focus:ring-2 ring-transparent focus:ring-transparent"
                        :class="{
             'border-red-500 focus:border-red-500': v$.daysUntilExpiration.$error, 'border-[#42d392] ': !v$.daysUntilExpiration.$invalid}"
                        label="Player 1"/>
