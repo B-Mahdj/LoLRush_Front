@@ -102,7 +102,7 @@ const modalFormSubmitHandler = async () => {
   loading.value = true
   if (result) {
     results.value = []
-    axios.defaults.timeout = 6000;
+    axios.defaults.timeout = 8000;
     await axios.get("https://lol-rush-back-gxqlr.ondigitalocean.app/page?code=" + formData.confirm_code).then(res => {
       if (res.status === 200) {
         results.value = res.data
