@@ -1,6 +1,9 @@
-# Nuxt 3 Minimal Starter
+# LoL Rush Frontend
+This project is the source code for the frontend of the project [LoLRush](https://www.lolrush.com/).
+<br/>
+The goal of this project is to help players create challenge with their friends and track their ranks. 
+<br/>
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
 ## Setup
 
