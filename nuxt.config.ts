@@ -33,6 +33,10 @@ export default defineNuxtConfig({
                     ital: [100]
                 },
             }
-        }]
+        }],
+        'nuxt-gtag',
     ],
+    gtag: {
+        id: process.env.GOOGLE_ANALYTICS_ID,
+    },
 })
