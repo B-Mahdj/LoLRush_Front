@@ -1,6 +1,8 @@
 # LoL Rush Frontend
 This project is the source code for the frontend of the project [LoLRush](https://www.lolrush.com/).
 <br/>
+The backend of the project can be found [HERE](https://github.com/B-Mahdj/LoLRush_Back).
+<br/>
 The goal of this project is to help players create challenge with their friends and track their ranks. 
 <br/>
 
